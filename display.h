@@ -1,7 +1,16 @@
 #pragma onec
 #include "TTGO_Config.h"
+
+#include <Adafruit_GFX.h>
+
 #include <TFT_eSPI.h>
+
 #include "Free_Fonts.h" // Include the header file attached to this sketch
+
+#include "SSD1306.h"
+
+#include <Adafruit_SSD1331.h>
+
 #define TFT_GREY 0x5AEB
 #define TFT_RED 0xF800
 
@@ -25,8 +34,14 @@ public:
 private:
   int _fHeight, _fWidth;
   int _height, _width;
+
 #ifdef ENABLE_TFT
   TFT_eSPI *_tft = nullptr;
-  // TFT_eSPI _tft = TFT_eSPI();
+#endif
+#ifdef ENABLE_SSD1306
+  SSD1306 *display = nullptr;
+#endif
+#ifdef ENABLE_SSD1331
+  Adafruit_SSD1331 *display = nullptr;
 #endif
 };

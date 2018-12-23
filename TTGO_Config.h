@@ -13,18 +13,36 @@
 // #define ENABLE_WS2812B
 // #define ENABLE_BUZZER
 // #define ENABLE_LOAR
-// #define ENABLE_SSD1306
+#define ENABLE_SSD1306
 // #define ENABLE_SSD1331
 // #define ENABLE_SLEEP_MODE
 // #define ENABLE_WIFI_MODE
-#define ENABLE_TFT
+// #define ENABLE_TFT
 // #define ENABLE_TFT_BACKLIGHT_CTL
 // #define ENABLE_BUTTON
-#define ENABLE_SPI_SD
+// #define ENABLE_SPI_SD
 // #define ENABLE_ADC_TEST
 // #define ENABLE_BLE_SCAN
 // #define ENABLE_WIFI_SOFT
-#define ENABLE_WIFI_SCAN
+// #define ENABLE_WIFI_SCAN
+// #define ENABLE_ATM90E26
+#define ENABLE_SIM800
+
+#ifdef ENABLE_SIM800
+#define UART_RX     15
+#define UART_TX     2
+#define BAUDRATE 9600
+#define SIM800_PWR_PIN  14
+#define SIM800_RST_PIN  12
+#endif
+
+#ifdef ENABLE_ATM90E26
+#include <energyic_UART.h>
+#define UART_RX     15
+#define UART_TX     2
+#define MMODE_PIN   0
+#endif 
+
 
 #ifdef ENABLE_BLE_SCAN
 #include <BLEDevice.h>
@@ -71,13 +89,7 @@
 /****************************************************************************/
 // 按键
 #ifdef ENABLE_BUTTON
-#include <OneButton.h>
-#define BUTTON_1 0
-#define BUTTON_2 0
-#define BUTTON_3 0
-#define BUTTON_4 36
-#define BUTTON_5 0
-typedef OneButton ButtonObj;
+#define BUTTON_PINS_ARRAY   {37, 38, 39}
 #endif
 
 #ifdef ENABLE_WIFI_MODE
@@ -95,6 +107,10 @@ typedef OneButton ButtonObj;
 
 //ssd1306 oled显示屏
 #ifdef ENABLE_SSD1306
+// #define GEOMETRY_128_64 0
+// #define GEOMETRY_128_32 1
+//*************************
+#define SSD1306_TYPE     GEOMETRY_128_64
 #define SSD1306_ADDRESS 0x3c
 #define I2C_SDA 21
 #define I2C_SCL 22
@@ -102,6 +118,7 @@ typedef OneButton ButtonObj;
 
 //lora模块
 #ifdef ENABLE_LOAR
+#include <LoRa.h>
 //lora频率设置
 #define LORA_PERIOD 868
 #define SCK 5
@@ -111,7 +128,8 @@ typedef OneButton ButtonObj;
 #define RST 23 //14//
 #define DI0 26
 //设置为1则设定为lora 发送， 0 则为接收
-#define LORA_SENDER 0
+#define LORA_SENDER     0
+#define LORA_SENDER_PERIOD  3 //sec发送周期
 #endif
 
 //蜂鸣器
@@ -124,15 +142,28 @@ typedef OneButton ButtonObj;
 
 //WS2812B RGB 彩灯
 #ifdef ENABLE_WS2812B
+#include <Adafruit_NeoPixel.h>
 #define WS2812B_PIN 33
 #define WS2812B_NUMS 1
 #endif
 
 //GPS模块
 #ifdef ENABLE_GPS
+#include <TinyGPS++.h>
 #define GPS_BANUD_RATE 9600
 #define GPS_RX_PIN 16
 #define GPS_TX_PIN 17
+#endif
+
+#ifdef ENABLE_SIM800
+#include <sim800.h>
+#define SIM800_TX           17
+#define SIM800_RX           16
+#define SIM800_POWER        9
+#define SIM800_RST          12
+#define SIM800_BAUDRATE         9600
+
+
 #endif
 
 //MPU9250 九轴姿态
@@ -142,6 +173,7 @@ typedef OneButton ButtonObj;
 
 //RTC 时钟
 #ifdef ENABLE_DS3231
+#include <RtcDS3231.h>
 // #define DS3231_ADDRESS 0x68
 #endif
 
